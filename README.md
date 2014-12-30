@@ -96,7 +96,7 @@ hbase shell
 
 6. sudo jps . Make sure hmaster,hregion,hquorumpeer are listed as java process.
 
-7. Start Kafka only if zoo keeper is up. That is hquorumpeer is listed in jps command.
+7. Start Kafka only if zoo keeper is up. That is hquorumpeer is listed in jps command. sudo bin/kafka-server-start.sh config/server.properties
 
 8. Start Hive Meta store using the command $hive --service metastore . If any errors are encountered you need to update hive-site.xml to enable local mode. hive.metastore.local=true should be set in hive-site.xml
 
