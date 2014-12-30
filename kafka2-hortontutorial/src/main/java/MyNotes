@@ -1,0 +1,84 @@
+--------- Major Bug ---------------------
+
+1.Always remove the data directory  and logs of storm,kafka and zoo keeper before working .. 
+
+sudo rm -r /hbase/hbasestorage/zookeeper/version-2 --> folders inside it, setting of zoo by hbase
+sudo rm -r /hbase/hbasestorage/zookeeper/myid --> folders inside it, setting of zoo by hbase
+sudo rm -r /storm/logs
+sudo rm -r /tmp/kafka-logs
+sudo rm -r /tmp/zoo   ---> This is setting of kafka for zoo keeper
+
+1. Version should be same while dealing with kafkaspout of storm and storm core.
+
+If tuples are not received to bolts and spouts, make sure version is correct. I had problem with versions so installed new version and used below.
+
+<storm.version>0.9.3</storm.version>
+<storm.kafka.version>0.9.3</storm.kafka.version>
+
+2. Storm UI was stuck at loading page so modified port number from storm.yaml file and changed to 8773
+
+3. Start hbase and hive before submitting tuples. Also make sure the version in pom.xml is equal to the one available in hadoop cluster.
+you can get versions of hbase and hive by navigating to lib folder of hive and hbase installation and see the jar files with version number
+
+4. start hive metastore with below command
+hive --service metastore
+
+5. If hive metastore is throwing error while executing hive command, then update hive-site.xml in conf folder of hive with below property.
+
+<property>
+<name>hive.metastore.local</name>
+<value>true</value> <description>
+Use false if a production metastore server is used.
+</description>
+</property>
+
+6. start hive metastore with the below command
+hive --service metastore
+
+7. To run the Hive from the client first you have to start the thrift server
+ 
+Command to Start the thrift server : 
+ 
+HIVE_PORT=10000 sudo /usr/lib/hive/bin/hive --service hiveserver
+
+Note: See ticket raised in edureka. 
+
+8. Use JDBC program provided by Karan to execute using thrift server.
+
+11. Always remove the data directory  and logs of storm,kafka and zoo keeper before working .. 
+
+sudo rm -r /hbase/hbasestorage/zookeeper/version-2 --> folders inside it, setting of zoo by hbase
+sudo rm -r /hbase/hbasestorage/zookeeper/myid --> folders inside it, setting of zoo by hbase
+sudo rm -r /storm/logs
+sudo rm -r /tmp/kafka-logs
+sudo rm -r /tmp/zoo   ---> This is setting of kafka for zoo keeper
+
+
+
+9. If you are not able to start the supervisor node. This setting was mentioned in storm.yaml file.
+cleanup the data folder from /home/user/storm/data using command sudo rm -r /home/user/storm/data
+
+10. Worker logs are present in storm installation folder . /usr/lib/storm/logs.
+
+------------ Major Bug -------------------
+1. If you are not able to start the supervisor node. This setting was mentioned in storm.yaml file.
+cleanup the data folder from /home/user/storm/data using command sudo rm -r /home/user/storm/data
+
+2. Worker logs are present in storm installation folder . /usr/lib/storm/logs. See this logs to trouble shoot the spouts and bolts.
+
+3. bin/storm kill topologyname .. You can do this from stormUI also.
+----------------------------------------
+4. Follow all 5 steps till consume in my kafka github
+
+sudo bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic truckevent --from-beginning
+
+--------------------------------------------
+
+Start Hbase  shell -- follow edureka readme
+hbase shell
+
+---------------------------------------------
+6. search as hdfsbolt. you can see the api and how the class path should be maintained.
+limitations like xml files should be declared in class path
+
+http://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.1.5/bk_user-guide/content/ch_storm-using-hbase-connector.html
